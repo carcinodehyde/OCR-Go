@@ -1,0 +1,6 @@
+export OCR_RUN_MODE='development'
+export OCR_PORT='8082'
+export OCR_SERVER_URL='http://localhost:8082/'
+export OCR_TEMP_FILES_DIR='/home/carcinodehyde/ocr/'
+export OCR_FE_URL=''
+export TESSDATA_PREFIX='/home/carcinodehyde/ocr/'
