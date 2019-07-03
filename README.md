@@ -1,6 +1,6 @@
-# gosseractcv
+# OCR GO
 
-gosseract and opencv implementation
+gosseract and opencv web server implementation using gin gonic as framework
 
 # How to install
 
