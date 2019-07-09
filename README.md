@@ -30,6 +30,10 @@ go get -u github.com/kardianos/govendor
 govendor sync
 ```
 
+# Move the tessdata folder
+
+Put the tessdata folder into /home/ or any other accessible folder, then set the value on `env.sh` with key `TESSDATA_PREFIX`
+
 # Run the project
 
 Source or execute the `env.sh` then either `go build` and run the executable, or `go run main.go` to get debug log in terminal.
