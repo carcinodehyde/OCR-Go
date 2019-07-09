@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/rollbar/rollbar-go"
-	cons "gitlab.com/digiverse/gosseractcv/constant"
+	cons "github.com/carcinodehyde/OCR-Go/constant"
 
 	"os"
 

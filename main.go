@@ -5,10 +5,10 @@ import (
 	"log"
 
 	"github.com/DeanThompson/ginpprof"
+	conf "github.com/carcinodehyde/OCR-Go/config"
+	"github.com/carcinodehyde/OCR-Go/logging"
+	"github.com/carcinodehyde/OCR-Go/routers"
 	"github.com/rollbar/rollbar-go"
-	conf "gitlab.com/digiverse/gosseractcv/config"
-	"gitlab.com/digiverse/gosseractcv/logging"
-	"gitlab.com/digiverse/gosseractcv/routers"
 )
 
 func main() {

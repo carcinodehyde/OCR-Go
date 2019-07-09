@@ -1,8 +1,8 @@
 package routers
 
 import (
-	ap "gitlab.com/digiverse/gosseractcv/api"
-	"gitlab.com/digiverse/gosseractcv/api/v1/ocr"
+	ap "github.com/carcinodehyde/OCR-Go/api"
+	"github.com/carcinodehyde/OCR-Go/api/v1/ocr"
 	"github.com/gin-gonic/gin"
 )
 
