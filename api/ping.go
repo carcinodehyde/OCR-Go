@@ -1,8 +1,8 @@
 package api
 
 import (
-	conf "gitlab.com/digiverse/gosseractcv/config"
-	cons "gitlab.com/digiverse/gosseractcv/constant"
+	conf "github.com/carcinodehyde/OCR-Go/config"
+	cons "github.com/carcinodehyde/OCR-Go/constant"
 
 	"net/http"
 	"time"
