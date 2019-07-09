@@ -8,16 +8,16 @@ import (
 	"os/exec"
 
 	"github.com/anthonynsimon/bild/imgio"
-	"github.com/chilts/sid"
-	"github.com/gin-gonic/gin"
-	"github.com/otiai10/gosseract"
 	conf "github.com/carcinodehyde/OCR-Go/config"
 	cons "github.com/carcinodehyde/OCR-Go/constant"
 	"github.com/carcinodehyde/OCR-Go/helpers"
 	"github.com/carcinodehyde/OCR-Go/logging"
+	"github.com/chilts/sid"
+	"github.com/gin-gonic/gin"
+	"github.com/otiai10/gosseract"
 )
 
-var log = logging.MustGetLogger(cons.LOG_MODULE)
+var log = logging.MustGetLogger(cons.LogModule)
 
 /*Parse uploaded image
 Return: json formatted parsed text of the image
@@ -71,16 +71,16 @@ func Parse(c *gin.Context) {
 
 			intB, err := strconv.Atoi(strB)
 
-			if intB < 55000 {
+			if intB < cons.ThresholdKTP {
 				err = helpers.EnhanceKTP(dst, img)
 				client.SetLanguage("OCR+IND")
-			} else if intB < 55800 {
+			} else if intB < cons.ThresholdGelap {
 				err = helpers.EnhanceTerang(dst, img)
 				client.SetLanguage("IND")
-			} else if intB < 65000 {
+			} else if intB < cons.ThresholdBalance {
 				client.SetLanguage("IND")
 				client.SetImage(dst + ".jpg")
-			} else if intB > 65000 {
+			} else if intB > cons.ThresholdTerang {
 				err = helpers.EnhanceGelap(dst, img)
 				client.SetLanguage("IND")
 			}
