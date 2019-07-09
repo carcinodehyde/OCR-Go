@@ -1,38 +1,15 @@
 # OCR GO
 
-gosseract and opencv web server implementation using gin gonic as framework
+gosseract and Imagick web server implementation using gin gonic as framework
 
 # How to install
 
-# Install GoCV
+# Install Imagick
 
-To install GoCV, run the following command:
-
-```
-go get -u -d gocv.io/x/gocv
-```
-
-To run code that uses the GoCV package, you must also install OpenCV 4.0.0 on your system. Here are instructions for Ubuntu, Raspian, macOS, and Windows.
+To install Imagick, run the following command:
 
 ## Ubuntu/Linux
-
-### Installation
-
-You can use `make` to install OpenCV 4.1.0 with the handy `Makefile` included with this repo. If you already have installed OpenCV, you do not need to do so again. The installation performed by the `Makefile` is minimal, so it may remove OpenCV options such as Python or Java wrappers if you have already installed OpenCV some other way.
-
-#### Quick Install
-
-The following commands should do everything to download and install OpenCV 4.1.0 on Linux:
-
-	cd $GOPATH/src/gocv.io/x/gocv
-	make install
-
-If it works correctly, at the end of the entire process, the following message should be displayed:
-
-	gocv version: 0.20.0
-	opencv lib version: 4.1.0
-
-That's it, now you are ready to use GoCV.
+sudo apt-get install libmagickwand-dev
 
 # Install Tesseract
 
