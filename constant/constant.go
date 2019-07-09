@@ -8,6 +8,12 @@ const (
 
 	ERR = 1
 	OK  = 0
+
+	KTP    = "KTP"
+	TERANG = "TERANG"
+	GELAP  = "GELAP"
+	OFF    = "OFF"
+	AUTO   = "AUTO"
 )
 
 type GenericResponse struct {

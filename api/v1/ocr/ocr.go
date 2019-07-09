@@ -2,20 +2,26 @@ package ocr
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
-	conf "gitlab.com/digiverse/gosseractcv/config"
-	cons "gitlab.com/digiverse/gosseractcv/constant"
-	"gitlab.com/digiverse/gosseractcv/helpers"
-	"gitlab.com/digiverse/gosseractcv/logging"
+	"os/exec"
+
+	"github.com/anthonynsimon/bild/imgio"
 	"github.com/chilts/sid"
 	"github.com/gin-gonic/gin"
 	"github.com/otiai10/gosseract"
-	"gocv.io/x/gocv"
+	conf "github.com/carcinodehyde/OCR-Go/config"
+	cons "github.com/carcinodehyde/OCR-Go/constant"
+	"github.com/carcinodehyde/OCR-Go/helpers"
+	"github.com/carcinodehyde/OCR-Go/logging"
 )
 
 var log = logging.MustGetLogger(cons.LOG_MODULE)
 
+/*Parse uploaded image
+Return: json formatted parsed text of the image
+*/
 func Parse(c *gin.Context) {
 	loggingID := logging.INTERNAL
 
@@ -30,30 +36,80 @@ func Parse(c *gin.Context) {
 	}
 	defer helpers.RemoveFile(dst + ".jpg")
 
-	tmpGray := gocv.IMRead(dst+".jpg", gocv.IMReadGrayScale)
-	if tmpGray.Empty() {
-		log.Errorf(loggingID, "Opencv failed to read image: %s\n", dst+".jpg")
-		c.JSON(http.StatusInternalServerError, cons.NewGenericResponse(http.StatusInternalServerError, cons.ERR, []string{"Something went wrong."}, nil))
-		return
-	}
-
-	tmpBin := gocv.NewMat()
-	gocv.Threshold(tmpGray, &tmpBin, 101, 255, gocv.ThresholdBinary)
-
-	if ok := gocv.IMWrite(dst+"_gray"+".jpg", tmpBin); !ok {
-		log.Errorf(loggingID, "Opencv failed to write grayscale image: %s\n", dst+"_gray"+".jpg")
-		c.JSON(http.StatusInternalServerError, cons.NewGenericResponse(http.StatusInternalServerError, cons.ERR, []string{"Something went wrong."}, nil))
-		return
-	}
-
 	client := gosseract.NewClient()
-	client.SetLanguage("OCR")
-	defer client.Close()
-	client.SetImage(dst + "_gray" + ".jpg")
-	text, _ := client.Text()
+	enhanceType := c.Query("enhancement")
+
+	if len(enhanceType) > 0 {
+		img, err := imgio.Open(dst + ".jpg")
+		if err != nil {
+			log.Errorf(loggingID, "error open: %s", err.Error())
+			c.JSON(http.StatusInternalServerError, cons.NewGenericResponse(http.StatusInternalServerError, cons.ERR, []string{"Something went wrong."}, nil))
+			return
+		}
+
+		switch enhanceType {
+		case cons.KTP:
+			err = helpers.EnhanceKTP(dst, img)
+			client.SetLanguage("OCR+IND")
+			break
+		case cons.GELAP:
+			err = helpers.EnhanceGelap(dst, img)
+			client.SetLanguage("IND")
+			break
+		case cons.TERANG:
+			err = helpers.EnhanceTerang(dst, img)
+			client.SetLanguage("IND")
+			break
+		case cons.AUTO:
+			ret, err := exec.Command(`identify`, `-format`, `"%[mean]"`, dst+".jpg").Output()
+			if err != nil {
+				log.Errorf(loggingID, "Error identify image: %s", err.Error())
+			}
+			strB := string(ret)
+			strB = strings.Trim(strB, "\"")
+			strB = strings.Split(strB, ".")[0]
+
+			intB, err := strconv.Atoi(strB)
+
+			if intB < 55000 {
+				err = helpers.EnhanceKTP(dst, img)
+				client.SetLanguage("OCR+IND")
+			} else if intB < 55800 {
+				err = helpers.EnhanceTerang(dst, img)
+				client.SetLanguage("IND")
+			} else if intB < 65000 {
+				client.SetLanguage("IND")
+				client.SetImage(dst + ".jpg")
+			} else if intB > 65000 {
+				err = helpers.EnhanceGelap(dst, img)
+				client.SetLanguage("IND")
+			}
+			client.SetLanguage("IND")
+		}
+
+		if err != nil {
+			log.Errorf(loggingID, "error enhancement: %s", err.Error())
+			c.JSON(http.StatusInternalServerError, cons.NewGenericResponse(http.StatusInternalServerError, cons.ERR, []string{"Something went wrong."}, nil))
+			return
+		}
+
+		defer helpers.RemoveFile(dst + "_enhanced.jpg")
+		client.SetImage(dst + "_enhanced.jpg")
+	} else {
+		client.SetLanguage("IND")
+		client.SetImage(dst + ".jpg")
+	}
+
+	text, err := client.Text()
+
+	if err != nil {
+		log.Errorf(loggingID, "error tesseract reading: %s", err.Error())
+		c.JSON(http.StatusInternalServerError, cons.NewGenericResponse(http.StatusInternalServerError, cons.ERR, []string{"Something went wrong."}, nil))
+		return
+	}
 
 	splited := strings.Split(text, "\n")
-	log.Infof(loggingID, "splitted text: %s", splited)
+	defer client.Close()
 
 	c.JSON(http.StatusOK, cons.NewGenericResponse(http.StatusOK, cons.OK, []string{"Submit success"}, splited))
 }

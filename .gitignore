@@ -7,7 +7,7 @@
 gosseractcv
 
 # vendor folder
-vendor
+vendor/*/
 
 # Folders
 _obj

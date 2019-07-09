@@ -1,8 +1,8 @@
 package config
 
 import (
-	cons "gitlab.com/digiverse/gosseractcv/constant"
-	"gitlab.com/digiverse/gosseractcv/logging"
+	cons "github.com/carcinodehyde/OCR-Go/constant"
+	"github.com/carcinodehyde/OCR-Go/logging"
 
 	"os"
 	"strconv"
