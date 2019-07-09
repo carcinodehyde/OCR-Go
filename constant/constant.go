@@ -1,10 +1,10 @@
 package constant
 
 const (
-	APP_VERSION       = "1.0.0"
-	PREFIX_ENV        = "OCR_"
-	LOG_MODULE        = "OCR"
-	INTERNAL_JWT_TIME = 8640000
+	AppVersion      = "1.0.0"
+	PrefixEnv       = "OCR_"
+	LogModule       = "OCR"
+	InternalJwtTime = 8640000
 
 	ERR = 1
 	OK  = 0
@@ -14,6 +14,11 @@ const (
 	GELAP  = "GELAP"
 	OFF    = "OFF"
 	AUTO   = "AUTO"
+
+	ThresholdKTP     = 55000
+	ThresholdGelap   = 55800
+	ThresholdBalance = 65000
+	ThresholdTerang  = 65000
 )
 
 type GenericResponse struct {

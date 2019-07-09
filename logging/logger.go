@@ -11,7 +11,7 @@ import (
 	opLogging "github.com/op/go-logging"
 )
 
-var log = opLogging.MustGetLogger(cons.LOG_MODULE)
+var log = opLogging.MustGetLogger(cons.LogModule)
 
 const INTERNAL = "internal"
 

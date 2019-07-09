@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-var log = logging.MustGetLogger(cons.LOG_MODULE)
+var log = logging.MustGetLogger(cons.LogModule)
 
 func RemoveFile(filePath string) {
 

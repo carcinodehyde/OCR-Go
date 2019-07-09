@@ -15,13 +15,13 @@ type ConfigurationModel struct {
 }
 
 var (
-	log           = logging.MustGetLogger(cons.LOG_MODULE)
+	log           = logging.MustGetLogger(cons.LogModule)
 	Configuration = &ConfigurationModel{}
 )
 
 func init() {
 	internal := logging.INTERNAL
-	prefixEnv := cons.PREFIX_ENV
+	prefixEnv := cons.PrefixEnv
 
 	server := ServerModel{
 		StartTime:    time.Now(),

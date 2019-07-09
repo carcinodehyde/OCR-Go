@@ -17,7 +17,7 @@ func Ping(c *gin.Context) {
 
 	res := map[string]string{
 		"start_time": startTime.Format("[02 January 2006] 15:04:05 MST"),
-		"message":    "Version " + cons.APP_VERSION + " run on " + runMode + " mode",
+		"message":    "Version " + cons.AppVersion + " run on " + runMode + " mode",
 	}
 	c.JSON(http.StatusOK, res)
 }
